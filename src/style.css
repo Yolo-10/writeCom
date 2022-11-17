@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  padding: 120px;
+}
+
+.example-block {
+  width: 40px;
+  height: 40px;
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid blue;
+  margin-right: 64px;
+  cursor: pointer;
+}
