@@ -3,7 +3,6 @@ const getTooltipPosition = (el,tooltip,position,gap) =>{
     const { width: tooltipWidth, height: tooltipHeight } = tooltip.getBoundingClientRect();
     let correctedLeft = elLeft;
     let correctedTop = elTop;
-    console.log('elLeft',elLeft,elTop)
 
     switch (position) {
         case 'top': {

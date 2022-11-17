@@ -23,7 +23,6 @@ export const Tooltip = ({children,position,gap,tooltipContent}) =>{
     const setRef = (el) =>{
         //el就是child
         childRef.current = el
-        console.log('too',tooltipRef)
         // console.log('ref',childRef); //ref {current: p.example-block}
 
         //本已经有ref了
@@ -36,9 +35,11 @@ export const Tooltip = ({children,position,gap,tooltipContent}) =>{
     useEffect(()=>{
         const el = childRef.current  //获取child
         if(!el) return;
-        const handleMouseEnter = (e) =>{
+        
+        const handleMouseEnter = async(e) =>{
             e.preventDefault();
-            setIsVisible(true)
+            //await重要，需要等待tooltip被渲染后才能得到tooltipRef，否则tooltipRef是undefined
+            await setIsVisible(true)
 
             const tooltip = tooltipRef.current
             if(!tooltip) return
