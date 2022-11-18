@@ -1,16 +1,21 @@
 .container {
   display: flex;
-  padding: 120px;
+  flex-direction: column;
+  padding: 20px;
+  background-color: pink;
+  height: 450px;
+  width: 300px;
+  overflow-y: scroll;
+  position: relative;
 }
 
-.example-block {
-  width: 40px;
-  height: 40px;
-  padding: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid blue;
-  margin-right: 64px;
-  cursor: pointer;
+.item{
+  background-color: #eee;
+  height: 50px;
+  padding: 10px;
+  text-align: center;
+}
+
+.item + .item{
+  margin-top: 5px;
 }

@@ -32,4 +32,8 @@ const getTooltipPosition = (el,tooltip,position,gap) =>{
    };
 }
 
-export {getTooltipPosition}
+const isN=(e)=>{
+   return  ((e===null)||(e==='')||(e===undefined))?true:false
+ }
+
+export {getTooltipPosition,isN}

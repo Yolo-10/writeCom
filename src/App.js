@@ -6,13 +6,61 @@ import { useRef } from 'react';
 
 function App() {
 
-  const myRef = useRef();
+  const content = (
+  <div>
+    <p>Content</p>
+    <p>Content</p>
+  </div>
+  )
+
+  const showPosition =(e)=>{
+    const first =e.nativeEvent.target.children[0];
+    console.log('pos',first.getBoundingClientRect())
+  }
 
   return (
-    <div className="container">
-      <Tooltip gap={8} position="left" tooltipContent={<p>Component</p>} 
-        trigger="contentMenu" closeEvent='click'>    
-        <p className="example-block" ref={myRef} >Left</p>
+    <div className="container" onScroll={showPosition} >
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
+      </Tooltip>
+      <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
+        <div className='item'>1</div>
       </Tooltip>
     </div>
   );

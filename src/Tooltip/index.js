@@ -1,6 +1,6 @@
 import React, { Children, cloneElement, useEffect, useRef,useState } from 'react'
 import { createPortal } from 'react-dom';
-import { getTooltipPosition } from './util'
+import { getTooltipPosition,isN } from './util'
 import './index.css'
 
 /**
@@ -8,11 +8,20 @@ import './index.css'
  * position: top, right, bottom, left
  * gap: 间距
  * tooltipContent: 提示的样式组件
+ * trigger: 触发事件 click、mouseenter、contextMenu
  * 在body外新增一个带有tooltipContent的div
  * 将tooltipContent的显隐事件控制放在children的事件中
  * 获取children的位置，设置tooltip的位置
  */
-export const Tooltip = ({children,position,gap,tooltipContent,trigger,closeEvent}) =>{
+export const Tooltip = ({
+    children,
+    position="top",
+    gap=5,
+    tooltipContent="Text",
+    trigger="contextmenu",
+    closeEvent="click",
+    pid = 'body'
+}) =>{
     //Children.onLy(children)保证children中只有一个React element child,不是则报错
     const child = Children.only(children)
     const childRef = useRef()
@@ -31,7 +40,7 @@ export const Tooltip = ({children,position,gap,tooltipContent,trigger,closeEvent
         }
     }
 
-    const showMenu = async(e,el) =>{
+    const showTooltip = async(e,el) =>{
         e.preventDefault();
         //await重要，需要等待tooltip被渲染后才能得到tooltipRef，否则tooltipRef是undefined
         await setIsVisible(true)
@@ -44,7 +53,7 @@ export const Tooltip = ({children,position,gap,tooltipContent,trigger,closeEvent
         tooltip.style.top = `${top}px`
     }
 
-    const closeMenu = () =>{
+    const closeTooltip = () =>{
         setIsVisible(false);
     }
 
@@ -52,12 +61,14 @@ export const Tooltip = ({children,position,gap,tooltipContent,trigger,closeEvent
         const el = childRef.current 
         if(!el) return;
 
-        el.addEventListener(trigger,e=>showMenu(e,el));
-        el.addEventListener(closeEvent,closeMenu);
+        el.addEventListener(trigger,e=>showTooltip(e,el));
+        el.addEventListener(closeEvent,closeTooltip);
+        // console.log('style',childRef.current,childRef.current? (childRef.current).getBoundingClientRect():'222')
+        // console.log('222',(childRef.current)?.getBoundingClientRect().top)
 
         return () =>{
-            el.removeEventListener(trigger,e=>showMenu(e,el));
-            el.removeEventListener(closeEvent,closeMenu);
+            el.removeEventListener(trigger,e=>showTooltip(e,el));
+            el.removeEventListener(closeEvent,closeTooltip);
         }
     },[childRef.current,tooltipRef.current,position,gap])
 
@@ -72,9 +83,10 @@ export const Tooltip = ({children,position,gap,tooltipContent,trigger,closeEvent
         {/** React.createPortal() 的方式，能让嵌套在 root 下的 jsx 子元素脱离出去 */}
         {isVisible && createPortal(
             <div ref={tooltipRef} className="tooltip">
-                {tooltipContent}
+                <div>{tooltipContent}</div>
+                <span></span>
             </div>,
-            document.getElementsByTagName('body')[0]
+            document.querySelector(pid)
         )}
     </>
 }
