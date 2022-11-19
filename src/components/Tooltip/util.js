@@ -1,10 +1,10 @@
 const getTooltipPosition = (el,tooltip,prt,position,gap) =>{
     const { top: elTop, left: elLeft, height: elHeight, width:  elWidth } = el.getBoundingClientRect();
     const { width: tooltipWidth, height: tooltipHeight } = tooltip.getBoundingClientRect();
+    const { top: prtTop, left: prtLeft } = prt.getBoundingClientRect()
 
-    let correctedLeft = elLeft + prt.scrollLeft;
-    let correctedTop = elTop + prt.scrollTop;
-
+    let correctedLeft = elLeft - prtLeft + prt.scrollLeft;
+    let correctedTop = elTop - prtTop + prt.scrollTop;
 
     switch (position) {
       case 'top': {
@@ -26,9 +26,9 @@ const getTooltipPosition = (el,tooltip,prt,position,gap) =>{
       default:
          correctedLeft = correctedLeft + elWidth / 2 - tooltipWidth / 2;
          correctedTop = correctedTop + elHeight + gap;
+         tooltip.classList.add('bottom');
    }
 
-   // console.log('after',correctedTop)
    return {
       left: correctedLeft,
       top: correctedTop,

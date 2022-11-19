@@ -11,15 +11,19 @@ import './index.css'
  * pid :父元素
  * trigger: 触发事件 click、mouseenter、contextmenu...
  * closeEvent: 关闭触发事件 click、mouseenter、contextmenu...
+ * open: 外部一同控制
+ * setOpen: 控制open
  */
 export const Tooltip = ({
     children,
     position="top",
     gap=5,
-    tooltipContent="Text",
+    content="Text",
     trigger="contextmenu",
     closeEvent="click",
-    pid = 'body'
+    pid = 'body',
+    open = true,
+    setOpen = ()=>{}
 }) =>{
     const child = Children.only(children)
     const childRef = useRef()
@@ -37,6 +41,7 @@ export const Tooltip = ({
     const showTooltip = async(e,el) =>{
         e.preventDefault();
         await setIsVisible(true)
+        setOpen();
 
         const tooltip = tooltipRef.current
         if(!tooltip) return
@@ -63,12 +68,16 @@ export const Tooltip = ({
         }
     },[childRef.current,tooltipRef.current,position,gap])
 
+    useEffect(()=>{
+        setIsVisible(open);
+    },[open])
+
     return <>
         {cloneElement(child,{ref:setRef})}
 
         {isVisible && createPortal(
             <div ref={tooltipRef} className="tooltip">
-                <div>{tooltipContent}</div>
+                <div>{content}</div>
                 <span></span>
             </div>,
             document.querySelector(pid)
