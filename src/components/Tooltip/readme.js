@@ -4,11 +4,14 @@ import { getTooltipPosition,isN } from './util'
 import './index.css'
 
 /**
+/** 带注释版说明
  * children: 将 带有提示 的元素
  * position: top, right, bottom, left
  * gap: 间距
  * tooltipContent: 提示的样式组件
- * trigger: 触发事件 click、mouseenter、contextMenu
+ * pid :父元素
+ * trigger: 触发事件 click、mouseenter、contextmenu...
+ * closeEvent: 关闭触发事件 click、mouseenter、contextmenu...
  * 在body外新增一个带有tooltipContent的div
  * 将tooltipContent的显隐事件控制放在children的事件中
  * 获取children的位置，设置tooltip的位置
@@ -86,6 +89,7 @@ export const Tooltip = ({
                 <div>{tooltipContent}</div>
                 <span></span>
             </div>,
+            //加在父元素下
             document.querySelector(pid)
         )}
     </>

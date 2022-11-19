@@ -1,6 +1,7 @@
 const getTooltipPosition = (el,tooltip,position,gap) =>{
     const { top: elTop, left: elLeft, height: elHeight, width:  elWidth } = el.getBoundingClientRect();
     const { width: tooltipWidth, height: tooltipHeight } = tooltip.getBoundingClientRect();
+    console.log('chi',elTop)
     let correctedLeft = elLeft;
     let correctedTop = elTop;
 
