@@ -41,7 +41,7 @@ export const Tooltip = ({
         const tooltip = tooltipRef.current
         if(!tooltip) return
 
-        const {left,top} = getTooltipPosition(el,tooltip,position,gap)
+        const {left,top} = getTooltipPosition(el,tooltip,document.querySelector(pid),position,gap)
         tooltip.style.left = `${left}px`
         tooltip.style.top = `${top}px`
     }

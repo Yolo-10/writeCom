@@ -3,7 +3,6 @@ import { Tooltip } from "../../components/Tooltip";
 import './index.css'
 
 export default function DemoTooltip() {
-  const myRef = useRef();
   const content = (
     <div>
       <p>Content</p>
@@ -11,13 +10,8 @@ export default function DemoTooltip() {
     </div>
   )
 
-  const scroll =(e)=>{
-    const first =e.nativeEvent.target.children[7];
-    console.log('pos',first.getBoundingClientRect().top)
-  }
-
   return (
-      <div className="container" onScroll={scroll} ref={myRef}>
+      <div className="container">
         <Tooltip position="top" tooltipContent={content} pid={'.container'}>    
         <div className='item'>1</div>
         </Tooltip>
