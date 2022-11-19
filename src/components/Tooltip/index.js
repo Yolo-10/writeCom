@@ -23,7 +23,7 @@ export const Tooltip = ({
     closeEvent="click",
     pid = 'body',
     open = true,
-    setOpen = ()=>{}
+    setOpen = ()=>{},
 }) =>{
     const child = Children.only(children)
     const childRef = useRef()
