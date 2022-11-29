@@ -6,28 +6,32 @@ import './index.css'
 /**
 /** 带注释版说明
  * children: 将 带有提示 的元素
- * position: top, right, bottom, left
- * gap: 间距
- * tooltipContent: 提示的样式组件
  * pid :父元素
+ * position: top, right, bottom, left
+ * content: 提示的样式组件
  * trigger: 触发事件 click、mouseenter、contextmenu...
  * closeEvent: 关闭触发事件 click、mouseenter、contextmenu...
- * open: 外部一同控制
- * setOpen: 控制open
+ * enterable：鼠标是否能够进入content内,content的mouseenter|mouseleave事件也能控制tooltip的显隐
+ * open: 外部传入，能与isVisible一同控制tooltip的显示
+ * setOpen: 外部函数指针，能控制open
+ * gap: 间距
+ * timeout: 关闭tooltip的延迟时间毫秒数
  * 在body外新增一个带有tooltipContent的div
  * 将tooltipContent的显隐事件控制放在children的事件中
  * 获取children的位置，设置tooltip的位置
  */
 export const Tooltip = ({
     children,
+    pid='body',
     position="top",
-    gap=5,
     content="Text",
     trigger="contextmenu",
     closeEvent="click",
-    pid = 'body',
-    open = true,
-    setOpen = ()=>{}
+    enterable=false,
+    open = false,
+    setOpen = ()=>{},
+    gap = 8,
+    timeout = 15000,
 }) =>{
     //Children.onLy(children)保证children中只有一个React element child,不是则报错
     const child = Children.only(children)
@@ -60,24 +64,46 @@ export const Tooltip = ({
         const {left,top} = getTooltipPosition(el,tooltip,document.querySelector(pid),position,gap)
         tooltip.style.left = `${left}px`
         tooltip.style.top = `${top}px`
+
+        //tooltip的移入显示、移出消失事件
+        if(enterable){
+            //用tooltip身上的一个属性enterable标志移入移出
+            tooltip.addEventListener('mouseenter',()=>tooltip.enterable=1);
+            tooltip.addEventListener('mouseleave',()=>{
+              tooltip.enterable=0;
+              closeTooltip()
+            })
+          }
     }
 
     const closeTooltip = () =>{
-        setIsVisible(false);
+        //tooltip身上的事件不设置---tooltipRef.current.enterable == undefined   false
+        //tooltip身上的事件设置-----tooltipRef.current.enterable == 0           false
+        if(tooltipRef.current && !tooltipRef.current.enterable){
+        //   console.log('close')
+          setTimeout(()=>setIsVisible(false),timeout);
+        }
     }
 
     useEffect(()=>{
         const el = childRef.current 
         if(!el) return;
 
-        el.addEventListener(trigger,e=>showTooltip(e,el));
-        el.addEventListener(closeEvent,closeTooltip);
-        // console.log('style',childRef.current,childRef.current? (childRef.current).getBoundingClientRect():'222')
-        // console.log('222',(childRef.current)?.getBoundingClientRect().top)
+        const handleTrigger = (e) => {
+            showTooltip(e,el)
+        }
+        const handleCloseEvent = (e) =>{
+            setTimeout(()=>closeTooltip(e),0)
+        }
+
+        //需要声明处理函数，在addEventListener、removeEventListener中再调用
+        //这样才能保证是同一个内存地址，不然移除的不是对应增加的那个
+        el.addEventListener(trigger,handleTrigger);
+        el.addEventListener(closeEvent,handleCloseEvent);
 
         return () =>{
-            el.removeEventListener(trigger,e=>showTooltip(e,el));
-            el.removeEventListener(closeEvent,closeTooltip);
+            el.removeEventListener(trigger,handleTrigger);
+            el.removeEventListener(closeEvent,handleCloseEvent);
         }
     },[childRef.current,tooltipRef.current,position,gap])
 
